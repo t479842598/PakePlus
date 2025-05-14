@@ -1,0 +1,18 @@
+#!name=嘉立创签到插件
+#!desc=嘉立创自动签到、获取积分等功能
+#!author=Telegram@sudojia
+#!homepage=https://blog.imzjw.cn
+
+[Script]
+http-request ^https://m\.jlc\.com/api/appPlatform/center/setting/selectPersonalInfo script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/getUserInfo.js, requires-body=false, timeout=10, tag=获取用户信息
+http-request ^https://m\.jlc\.com/api/activity/sign/getCurrentUserSignInConfig script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/checkSign.js, requires-body=false, timeout=10, tag=检查签到状态
+http-request ^https://m\.jlc\.com/api/activity/sign/signIn\?source=4 script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/sign.js, requires-body=false, timeout=10, tag=执行签到
+http-request ^https://m\.jlc\.com/api/activity/sign/receiveVoucher script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/receiveVoucher.js, requires-body=false, timeout=10, tag=领取优惠券
+http-request ^https://m\.jlc\.com/api/activity/front/getCustomerIntegral script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/getPoints.js, requires-body=false, timeout=10, tag=获取积分信息
+
+# 定时任务
+cron "0 9 * * *" script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/sign.js, tag=每日签到
+cron "30 9 * * *" script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/receiveVoucher.js, tag=领取优惠券
+
+[MITM]
+hostname = m.jlc.com
