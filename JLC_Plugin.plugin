@@ -6,21 +6,21 @@
 [Script]
 # 主要定时任务：基于 sudojia_jlc.js 的逻辑，执行每日签到、领券、获取信息等系列操作。
 # 您需要创建一个 jlc_daily_all_tasks.js 脚本，将 sudojia_jlc.js 中的主要功能移植到Loon兼容的格式。
-cron "30 6 * * *" script-path=https://your.host.com/path/to/jlc_daily_all_tasks.js, timeout=300, tag=嘉立创每日全能任务
+cron "30 6 * * *" script-path=https://raw.githubusercontent.com/t479842598/PakePlus/refs/heads/main/jlc_daily_all_tasks.js, timeout=300, tag=嘉立创每日全能任务
 
 # HTTP请求触发脚本 (可选功能，用于"自动重写抓包"或在特定应用操作时触发辅助功能)
 # 以下脚本也需要您根据 sudojia_jlc.js 中的对应函数逻辑，创建为Loon兼容的独立JS文件。
 
 # 当App请求用户信息时触发 (对应 getUserInfo 函数)
-http-request ^https://m\.jlc\.com/api/appPlatform/center/setting/selectPersonalInfo script-path=https://your.host.com/path/to/jlc_on_userinfo_req.js, requires-body=false, timeout=10, tag=捕获用户信息请求
+http-request ^https://m\.jlc\.com/api/appPlatform/center/setting/selectPersonalInfo script-path=https://raw.githubusercontent.com/t479842598/PakePlus/refs/heads/main/jlc_on_userinfo_req.js, requires-body=false, timeout=10, tag=捕获用户信息请求
 # 当App检查签到状态时触发 (对应 checkSign 函数的部分逻辑)
-http-request ^https://m\.jlc\.com/api/activity/sign/getCurrentUserSignInConfig script-path=https://your.host.com/path/to/jlc_on_checksign_req.js, requires-body=false, timeout=10, tag=捕获检查签到请求
+http-request ^https://m\.jlc\.com/api/activity/sign/getCurrentUserSignInConfig script-path=https://raw.githubusercontent.com/t479842598/PakePlus/refs/heads/main/jlc_on_checksign_req.js, requires-body=false, timeout=10, tag=捕获检查签到请求
 # 当App执行签到时触发 (对应 sign 函数的部分逻辑)
-http-request ^https://m\.jlc\.com/api/activity/sign/signIn\?source=4 script-path=https://your.host.com/path/to/jlc_on_signin_req.js, requires-body=false, timeout=10, tag=捕获签到请求
+http-request ^https://m\.jlc\.com/api/activity/sign/signIn\?source=4 script-path=https://raw.githubusercontent.com/t479842598/PakePlus/refs/heads/main/jlc_on_signin_req.js, requires-body=false, timeout=10, tag=捕获签到请求
 # 当App领取优惠券时触发 (对应 receiveVoucher 函数的部分逻辑)
-http-request ^https://m\.jlc\.com/api/activity/sign/receiveVoucher script-path=https://your.host.com/path/to/jlc_on_receivevoucher_req.js, requires-body=false, timeout=10, tag=捕获领券请求
+http-request ^https://m\.jlc\.com/api/activity/sign/receiveVoucher script-path=https://raw.githubusercontent.com/t479842598/PakePlus/refs/heads/main/jlc_on_receivevoucher_req.js, requires-body=false, timeout=10, tag=捕获领券请求
 # 当App获取积分信息时触发 (对应 getPoints 函数的部分逻辑)
-http-request ^https://m\.jlc\.com/api/activity/front/getCustomerIntegral script-path=https://your.host.com/path/to/jlc_on_getpoints_req.js, requires-body=false, timeout=10, tag=捕获获取积分请求
+http-request ^https://m\.jlc\.com/api/activity/front/getCustomerIntegral script-path=https://raw.githubusercontent.com/t479842598/PakePlus/refs/heads/main/jlc_on_getpoints_req.js, requires-body=false, timeout=10, tag=捕获获取积分请求
 
 [MITM]
 hostname = m.jlc.com
