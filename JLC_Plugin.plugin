@@ -1,18 +1,26 @@
-#!name=嘉立创签到插件
-#!desc=嘉立创自动签到、获取积分等功能
-#!author=Telegram@sudojia
-#!homepage=https://blog.imzjw.cn
+#!name=嘉立创增强插件 (基于自定义JS)
+#!desc=嘉立创自动签到、获取积分、领券等。基于用户提供的 sudojia_jlc.js 逻辑进行适配。
+#!author=Telegram@sudojia (由AI辅助修改适配)
+#!homepage=https://blog.imzjw.cn (用户需确认或修改)
 
 [Script]
-http-request ^https://m\.jlc\.com/api/appPlatform/center/setting/selectPersonalInfo script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/getUserInfo.js, requires-body=false, timeout=10, tag=获取用户信息
-http-request ^https://m\.jlc\.com/api/activity/sign/getCurrentUserSignInConfig script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/checkSign.js, requires-body=false, timeout=10, tag=检查签到状态
-http-request ^https://m\.jlc\.com/api/activity/sign/signIn\?source=4 script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/sign.js, requires-body=false, timeout=10, tag=执行签到
-http-request ^https://m\.jlc\.com/api/activity/sign/receiveVoucher script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/receiveVoucher.js, requires-body=false, timeout=10, tag=领取优惠券
-http-request ^https://m\.jlc\.com/api/activity/front/getCustomerIntegral script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/getPoints.js, requires-body=false, timeout=10, tag=获取积分信息
+# 主要定时任务：基于 sudojia_jlc.js 的逻辑，执行每日签到、领券、获取信息等系列操作。
+# 您需要创建一个 jlc_daily_all_tasks.js 脚本，将 sudojia_jlc.js 中的主要功能移植到Loon兼容的格式。
+cron "30 6 * * *" script-path=https://your.host.com/path/to/jlc_daily_all_tasks.js, timeout=300, tag=嘉立创每日全能任务
 
-# 定时任务
-cron "0 9 * * *" script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/sign.js, tag=每日签到
-cron "30 9 * * *" script-path=https://raw.githubusercontent.com/sudojia/scripts/main/jlc/receiveVoucher.js, tag=领取优惠券
+# HTTP请求触发脚本 (可选功能，用于"自动重写抓包"或在特定应用操作时触发辅助功能)
+# 以下脚本也需要您根据 sudojia_jlc.js 中的对应函数逻辑，创建为Loon兼容的独立JS文件。
+
+# 当App请求用户信息时触发 (对应 getUserInfo 函数)
+http-request ^https://m\.jlc\.com/api/appPlatform/center/setting/selectPersonalInfo script-path=https://your.host.com/path/to/jlc_on_userinfo_req.js, requires-body=false, timeout=10, tag=捕获用户信息请求
+# 当App检查签到状态时触发 (对应 checkSign 函数的部分逻辑)
+http-request ^https://m\.jlc\.com/api/activity/sign/getCurrentUserSignInConfig script-path=https://your.host.com/path/to/jlc_on_checksign_req.js, requires-body=false, timeout=10, tag=捕获检查签到请求
+# 当App执行签到时触发 (对应 sign 函数的部分逻辑)
+http-request ^https://m\.jlc\.com/api/activity/sign/signIn\?source=4 script-path=https://your.host.com/path/to/jlc_on_signin_req.js, requires-body=false, timeout=10, tag=捕获签到请求
+# 当App领取优惠券时触发 (对应 receiveVoucher 函数的部分逻辑)
+http-request ^https://m\.jlc\.com/api/activity/sign/receiveVoucher script-path=https://your.host.com/path/to/jlc_on_receivevoucher_req.js, requires-body=false, timeout=10, tag=捕获领券请求
+# 当App获取积分信息时触发 (对应 getPoints 函数的部分逻辑)
+http-request ^https://m\.jlc\.com/api/activity/front/getCustomerIntegral script-path=https://your.host.com/path/to/jlc_on_getpoints_req.js, requires-body=false, timeout=10, tag=捕获获取积分请求
 
 [MITM]
 hostname = m.jlc.com
